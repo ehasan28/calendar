@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Universal Calendar",
-    "slug": "universal-calendar",
+    "name": "Calendar",
+    "slug": "calendar",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "universalcalendar",
+    "scheme": "calendar",
     "userInterfaceStyle": "automatic",
     "android": {
       "adaptiveIcon": {
@@ -17,7 +17,7 @@
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png",
-      "name": "Universal Calendar",
+      "name": "Calendar",
       "shortName": "Calendar",
       "themeColor": "#0F1B2D",
       "backgroundColor": "#ffffff",

@@ -2,7 +2,7 @@
    HTML/navigation: network-first (always fresh app shell; falls back to cache offline).
    Other assets: cache-first with background refresh.
    Bump CACHE when shipping asset changes so old PWA caches purge. */
-const CACHE = 'universal-calendar-v1';
+const CACHE = 'calendar-v1';
 
 self.addEventListener('install', () => self.skipWaiting());
 

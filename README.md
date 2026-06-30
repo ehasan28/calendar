@@ -1,4 +1,4 @@
-# Universal Calendar
+# Calendar
 
 One calendar that shows **English (Gregorian)**, **Bangla (Bangabda)**, and **Arabic (Hijri)** dates together — plus a minimal full‑screen clock with time‑synced animated themes. Built as an installable PWA (iPhone, Android, Mac, Windows), offline‑first, with an Apple‑minimal design.
 
