@@ -3,8 +3,6 @@ import { create } from 'zustand';
 
 export type Mode = 'default' | 'agricultural' | 'islamic';
 export type ThemePref = 'light' | 'dark' | 'system';
-/** Which calendar pairing each day cell shows in Default mode. */
-export type CombinedView = 'english' | 'english-arabic' | 'bangla-english';
 export type NumeralStyle = 'western' | 'bangla' | 'arabic';
 export type ClockFace = 'digital' | 'analog' | 'flip' | 'nightstand';
 export type ClockTheme = 'celestial' | 'gradient' | 'aurora' | 'starfield' | 'seasonal' | 'islamic' | 'mono';
@@ -22,7 +20,6 @@ export type CalendarEvent = {
 export type Settings = {
   mode: Mode;
   theme: ThemePref;
-  combinedView: CombinedView;
   /** Per-calendar visibility toggles (apply across views). */
   show: Record<CalendarKey, boolean>;
   numerals: NumeralStyle;
@@ -35,7 +32,6 @@ export type Settings = {
 const DEFAULT_SETTINGS: Settings = {
   mode: 'default',
   theme: 'system',
-  combinedView: 'english-arabic',
   show: { english: true, bangla: true, hijri: true },
   numerals: 'western',
   clockFace: 'digital',

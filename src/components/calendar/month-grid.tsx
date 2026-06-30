@@ -32,29 +32,28 @@ function Cell({
 }) {
   const theme = useTheme();
   const settings = useStore((s) => s.settings);
-  const labels = cellLabels(date, settings);
+  const { leading, secondaries } = cellLabels(date, settings);
   const dot = markerColor(date, { mode: settings.mode, gold: settings.mode === 'islamic' });
 
-  const primaryColor = isToday ? '#fff' : inMonth ? theme.text : theme.tertiary;
+  const leadColor = isToday ? '#fff' : inMonth ? theme.text : theme.tertiary;
 
   return (
     <Pressable
       onPress={onPress}
       style={[styles.cell, isSelected && !isToday && { backgroundColor: theme.backgroundElement }]}>
       <View style={[styles.dayNum, isToday && { backgroundColor: theme.today }]}>
-        <Text style={[styles.primary, { color: primaryColor, fontFamily: labels.primaryFont as any }]}>
-          {labels.primary}
-        </Text>
+        <Text style={[styles.primary, { color: leadColor, fontFamily: leading.font as any }]}>{leading.value}</Text>
       </View>
-      {labels.secondary ? (
-        <Text
-          style={[styles.secondary, { color: inMonth ? theme.textSecondary : theme.tertiary, fontFamily: labels.secondaryFont as any }]}
-          numberOfLines={1}>
-          {labels.secondary}
-        </Text>
-      ) : (
-        <View style={styles.secondarySpacer} />
-      )}
+      <View style={styles.secRow}>
+        {secondaries.map((s) => (
+          <Text
+            key={s.key}
+            style={[styles.secondary, { color: inMonth ? s.color : theme.tertiary, fontFamily: s.font as any }]}
+            numberOfLines={1}>
+            {s.value}
+          </Text>
+        ))}
+      </View>
       <View style={[styles.dot, dot ? { backgroundColor: dot } : { backgroundColor: 'transparent' }]} />
     </Pressable>
   );
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   cell: {
     width: `${100 / 7}%`,
-    aspectRatio: 0.92,
+    aspectRatio: 0.82,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: 6,
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
   },
   dayNum: { minWidth: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 },
   primary: { fontSize: 16, fontWeight: '600' },
-  secondary: { fontSize: 10, fontWeight: '500', marginTop: 1 },
-  secondarySpacer: { height: 12, marginTop: 1 },
-  dot: { width: 5, height: 5, borderRadius: 2.5, marginTop: 3 },
+  secRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 1, height: 14 },
+  secondary: { fontSize: 11, fontWeight: '700' },
+  dot: { width: 5, height: 5, borderRadius: 2.5, marginTop: 2 },
 });

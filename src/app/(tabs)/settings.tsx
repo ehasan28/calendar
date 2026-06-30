@@ -1,5 +1,6 @@
-import { Switch, View } from 'react-native';
+import { Switch, Text, View } from 'react-native';
 
+import { ModeSwitcher } from '@/components/mode-switcher';
 import { Screen } from '@/components/screen';
 import { Card, Row, ScreenTitle, SectionLabel, SegmentedControl } from '@/components/ui';
 import { CalendarTint, Spacing } from '@/constants/theme';
@@ -22,6 +23,15 @@ export default function SettingsScreen() {
   return (
     <Screen>
       <ScreenTitle>Settings</ScreenTitle>
+
+      <SectionLabel>MODE</SectionLabel>
+      <Card style={{ gap: Spacing.two, marginBottom: Spacing.four }}>
+        <ModeSwitcher />
+        <Text style={{ color: theme.textSecondary, fontSize: 13, lineHeight: 18 }}>
+          Sets which calendar leads the grid and which panel shows: Default (English), Agriculture (Bangla seasons &
+          crops), Islamic (Hijri, prayer times & occasions).
+        </Text>
+      </Card>
 
       <SectionLabel>APPEARANCE</SectionLabel>
       <Card style={{ gap: Spacing.three, marginBottom: Spacing.four }}>

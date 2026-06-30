@@ -1,32 +1,24 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 
-import { ModeSwitcher } from '@/components/mode-switcher';
 import { MonthGrid, MonthHeader } from '@/components/calendar/month-grid';
+import { CalendarLegend } from '@/components/calendar/calendar-legend';
 import { DayDetail } from '@/components/calendar/day-detail';
+import { ModeBadge } from '@/components/mode-badge';
 import { AgriculturePanel } from '@/components/modes/agriculture-panel';
 import { IslamicPanel } from '@/components/modes/islamic-panel';
 import { Screen } from '@/components/screen';
-import { SegmentedControl } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { MONTHS_EN, addMonths, startOfDay } from '@/lib/calendars/gregorian';
 import { banglaMonthName, toBangla } from '@/lib/calendars/bangla';
 import { hijriMonthName, toHijri } from '@/lib/calendars/hijri';
-import { useStore, type CombinedView } from '@/store/useStore';
-
-const COMBINED_OPTS: { label: string; value: CombinedView }[] = [
-  { label: 'English', value: 'english' },
-  { label: 'Eng + Arabic', value: 'english-arabic' },
-  { label: 'Bangla + Eng', value: 'bangla-english' },
-];
+import { useStore } from '@/store/useStore';
 
 export default function CalendarScreen() {
   const today = useMemo(() => startOfDay(new Date()), []);
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selected, setSelected] = useState(today);
   const mode = useStore((s) => s.settings.mode);
-  const combinedView = useStore((s) => s.settings.combinedView);
-  const patch = useStore((s) => s.patchSettings);
 
   const year = cursor.getFullYear();
   const month = cursor.getMonth() + 1;
@@ -37,8 +29,8 @@ export default function CalendarScreen() {
 
   return (
     <Screen>
-      <View style={{ marginBottom: Spacing.three }}>
-        <ModeSwitcher />
+      <View style={{ marginBottom: Spacing.two }}>
+        <ModeBadge />
       </View>
 
       <MonthHeader
@@ -52,12 +44,7 @@ export default function CalendarScreen() {
         }}
       />
 
-      {mode === 'default' && (
-        <View style={{ marginBottom: Spacing.three }}>
-          <SegmentedControl options={COMBINED_OPTS} value={combinedView} onChange={(v) => patch({ combinedView: v })} />
-        </View>
-      )}
-
+      <CalendarLegend />
       <MonthGrid year={year} month={month} selected={selected} onSelect={setSelected} />
 
       <View style={{ height: Spacing.three }} />

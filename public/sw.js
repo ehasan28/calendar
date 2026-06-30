@@ -1,8 +1,8 @@
-/* Universal Calendar — service worker.
+/* Calendar — service worker.
    HTML/navigation: network-first (always fresh app shell; falls back to cache offline).
    Other assets: cache-first with background refresh.
    Bump CACHE when shipping asset changes so old PWA caches purge. */
-const CACHE = 'calendar-v1';
+const CACHE = 'calendar-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 

@@ -1,42 +1,51 @@
-import { ScriptFont } from '@/constants/theme';
+import { CalendarTint, ScriptFont } from '@/constants/theme';
 import { toBangla } from '@/lib/calendars/bangla';
 import { toHijri } from '@/lib/calendars/hijri';
 import { toNumerals } from '@/lib/calendars/numerals';
-import type { Settings } from '@/store/useStore';
+import type { CalendarKey, Mode, Settings } from '@/store/useStore';
 
-export type CellLabel = {
-  primary: string;
-  primaryFont?: string;
-  secondary?: string;
-  secondaryFont?: string;
+export type CalNum = { key: CalendarKey; value: string; color: string; font?: string };
+export type CellLabel = { leading: CalNum; secondaries: CalNum[] };
+
+/** Fixed display order; the mode's lead calendar is pulled to the front. */
+const ORDER: CalendarKey[] = ['english', 'bangla', 'hijri'];
+
+export const LEAD_BY_MODE: Record<Mode, CalendarKey> = {
+  default: 'english',
+  agricultural: 'bangla',
+  islamic: 'hijri',
+};
+
+export const CALENDAR_NAME: Record<CalendarKey, string> = {
+  english: 'English',
+  bangla: 'Bangla',
+  hijri: 'Arabic',
 };
 
 /**
- * Decide what a day cell shows, given the active mode + combined-view toggle +
- * per-calendar visibility. Default mode keeps English primary; Agricultural
- * leads with Bangla; Islamic leads with Hijri.
+ * One calendar's day number, in its NATIVE script/numerals so the three are
+ * distinguishable by shape as well as color (English 0-9, Bangla ০-৯, Hijri ٠-٩).
  */
-export function cellLabels(date: Date, s: Settings): CellLabel {
-  const n = s.numerals;
-  const eng = toNumerals(date.getDate(), n);
-  const ban = toNumerals(toBangla(date).day, n);
-  const hij = toNumerals(toHijri(date).day, n);
+function calNum(date: Date, key: CalendarKey): CalNum {
+  if (key === 'bangla') {
+    return { key, value: toNumerals(toBangla(date).day, 'bangla'), color: CalendarTint.bangla, font: ScriptFont.bangla };
+  }
+  if (key === 'hijri') {
+    return { key, value: toNumerals(toHijri(date).day, 'arabic'), color: CalendarTint.hijri, font: ScriptFont.arabic };
+  }
+  return { key, value: String(date.getDate()), color: CalendarTint.english };
+}
 
-  if (s.mode === 'agricultural') {
-    return { primary: ban, primaryFont: ScriptFont.bangla, secondary: s.show.english ? eng : undefined };
-  }
-  if (s.mode === 'islamic') {
-    return { primary: hij, primaryFont: ScriptFont.arabic, secondary: s.show.english ? eng : undefined };
-  }
-  // default
-  let secondary: string | undefined;
-  let secondaryFont: string | undefined;
-  if (s.combinedView === 'english-arabic' && s.show.hijri) {
-    secondary = hij;
-    secondaryFont = ScriptFont.arabic;
-  } else if (s.combinedView === 'bangla-english' && s.show.bangla) {
-    secondary = ban;
-    secondaryFont = ScriptFont.bangla;
-  }
-  return { primary: eng, secondary, secondaryFont };
+/** Resolve which calendars a cell shows: the mode's lead first, then the other enabled ones. */
+export function resolveCalendars(s: Settings): { lead: CalendarKey; secondaries: CalendarKey[] } {
+  const enabled = ORDER.filter((k) => s.show[k]);
+  const pool = enabled.length ? enabled : (['english'] as CalendarKey[]);
+  const lead = pool.includes(LEAD_BY_MODE[s.mode]) ? LEAD_BY_MODE[s.mode] : pool[0];
+  return { lead, secondaries: pool.filter((k) => k !== lead) };
+}
+
+/** Leading + color-coded secondary day numbers for a cell, driven by mode + visibility. */
+export function cellLabels(date: Date, s: Settings): CellLabel {
+  const { lead, secondaries } = resolveCalendars(s);
+  return { leading: calNum(date, lead), secondaries: secondaries.map((k) => calNum(date, k)) };
 }

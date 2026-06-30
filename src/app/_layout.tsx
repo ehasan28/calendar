@@ -5,6 +5,7 @@ import { Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useColorMode } from '@/hooks/use-theme';
+import { startDynamicFavicon } from '@/lib/dynamic-favicon';
 import { hydrateStore, useStore } from '@/store/useStore';
 
 export default function RootLayout() {
@@ -14,6 +15,9 @@ export default function RootLayout() {
   useEffect(() => {
     hydrateStore();
   }, []);
+
+  // Live browser-tab favicon showing today's date (web only).
+  useEffect(() => startDynamicFavicon(), []);
 
   // Ask the browser to keep our data (exempt from automatic eviction). Web/PWA only.
   useEffect(() => {

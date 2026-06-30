@@ -38,6 +38,8 @@ export default function Root({ children }: PropsWithChildren) {
 }
 
 const backgroundCss = `
+html, body { height: 100%; }
+#root { display: flex; height: 100%; min-height: 100dvh; }
 html, body, #root { background-color: #ffffff; }
 @media (prefers-color-scheme: dark) { html, body, #root { background-color: #000000; } }
 body { overscroll-behavior-y: none; }

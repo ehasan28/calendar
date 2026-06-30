@@ -29,6 +29,9 @@ export function BottomBar({ children, style, ...props }: ViewProps) {
       onLayout={(e) => setTabBarHeight(e.nativeEvent.layout.height)}
       style={[
         styles.bar,
+        // On web, `fixed` pins to the visual-viewport bottom regardless of
+        // container height (native uses absolute relative to the screen).
+        Platform.OS === 'web' && ({ position: 'fixed' } as object),
         { borderTopColor: theme.separator, paddingBottom: insets.bottom + Spacing.two },
         glass as object,
         style,
