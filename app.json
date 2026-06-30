@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Universal Calendar",
+    "slug": "universal-calendar",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "universalcalendar",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0F1B2D",
+        "foregroundImage": "./assets/images/icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "name": "Universal Calendar",
+      "shortName": "Calendar",
+      "themeColor": "#0F1B2D",
+      "backgroundColor": "#ffffff",
+      "display": "standalone"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0F1B2D",
+          "android": {
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 76
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
